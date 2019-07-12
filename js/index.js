@@ -4564,31 +4564,19 @@ var SoaringSheepGame = function(){
 			var playerid = (new URL(location.href)).searchParams.get("id");
 
 			// Submit highscore to Telegram via POST request
-			var url = "https://samstudiosbot.now.sh/score";
+			var url = "/score";
 			var info = {
 				"score": this.score,
 				"id": playerid,
 				"game": "SoaringSheep"
 			}
 
-			alert(JSON.stringify(info)+" "+url);
-
 			//BUG: solve issue to do with cross origin
 			var request = new window.XMLHttpRequest();
-			//request.withCredentials = true;
+			request.open('POST', url, true);
 
-			if ("withCredentials" in request){
-				// XHR has 'withCredentials' property only if it supports CORS
-				request.open('POST', url, true);
-
-				request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-				request.send(JSON.stringify(info))
-			} else if (typeof XDomainRequest != "undefined"){ // if IE use XDR
-				request = new XDomainRequest();
-				request.open(method, url);
-			} else {
-				alert("Unfortunately cannot send score to Telegram; browser not supported :(");
-			}
+			request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+			request.send(JSON.stringify(info))
 		}
 
         //ACHIEVEMENT: SCORE/SCORE_TIMES
