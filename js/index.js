@@ -1165,7 +1165,7 @@ var SoaringSheepGame = function(){
 			backgroundColor: 0x90a4ae
 		}
 
-		renderer = PIXI.autoDetectRenderer(rendererOptions);
+		var renderer = PIXI.autoDetectRenderer(rendererOptions);
 
 		//INIT STAGE AND RESIZE TO FIT SCREEN
 		stage = new PIXI.Container();
@@ -1230,6 +1230,7 @@ var SoaringSheepGame = function(){
         for(i in this.animations){
             if(!this.animations.hasOwnProperty(i)) continue;
 
+            var j = 0;
     		for(j=0;j<this.animations[i].totalFrames;j++){
     			this.loader.add(i.toString()+"_"+j,"img/animations/"+i.toString()+"/"+j+".png");
     		}
@@ -1348,7 +1349,7 @@ var SoaringSheepGame = function(){
 			this.muteMusicButton.getChildByName("music_on").alpha = 1;
 
 			//--Text
-			textOpt = {
+			var textOpt = {
 				fontFamily: 'TimeBurnerBold',
 				fill: "0x90a4ae",
 				letterSpacing: 5,
@@ -1356,7 +1357,7 @@ var SoaringSheepGame = function(){
 				fontSize: 20
 			};
 
-			text = new PIXI.Text("MUSIC",textOpt);
+			var text = new PIXI.Text("MUSIC",textOpt);
 			text.anchor.set(0.5,0.5);
 			text.alpha = 1;
 			text.y = 55;
@@ -1462,7 +1463,8 @@ var SoaringSheepGame = function(){
             text.y = 55;
             this.shopButton.addChild(text);
 
-			//ANIMATIONS
+            //ANIMATIONS
+            var j = null;
             for(j in this.animations){
                 if(!this.animations.hasOwnProperty(j)) continue;
 
@@ -1571,7 +1573,7 @@ var SoaringSheepGame = function(){
 
 		this.startScreen.addChild(text);
 
-		text2 = new PIXI.Text("SHEEP",Object.assign(textOpt));
+		var text2 = new PIXI.Text("SHEEP",Object.assign(textOpt));
 		text2.anchor.set(0.5,0.5);
 		text2.x = this.canvasWidth/2+73;
 		text2.y = this.canvasHeight/2-20;
@@ -2059,7 +2061,8 @@ var SoaringSheepGame = function(){
         this.shop.tabs = {};
 
         var tabMarginTop = 190, tabHeight = 80;
-
+        
+        var i = 0;
         for(i=0;i<this.shopTabNames.length;i++){
             this.shop.tabs[this.shopTabNames[i]] = new PIXI.Container();
 
@@ -2318,7 +2321,7 @@ var SoaringSheepGame = function(){
 			this.sprites.background.alpha = 0;
 
 			//Sheep
-			sheep = new PIXI.Sprite(this.animations.sheep_base.frames[0]);
+			var sheep = new PIXI.Sprite(this.animations.sheep_base.frames[0]);
 			sheep.anchor.set(0.5,0.5);
 			sheep.scale.set(0.35,0.35);
 			sheep.rotation = -Math.PI/40;
@@ -3136,6 +3139,7 @@ var SoaringSheepGame = function(){
         }
 
         //Tab overlays
+        var i = 0;
         for(i=0;i<this.shopTabNames.length;i++){
             this.shop.tabs[this.shopTabNames[i]].overlay.visible = true;
             this.shop.tabContent[this.shopTabNames[i]].visible = false;
@@ -3698,7 +3702,7 @@ var SoaringSheepGame = function(){
         var avail = this.checkUpgradeAvailability(nm);
         if(!avail) return;
 
-        data = this.upgrades[nm];
+        var data = this.upgrades[nm];
         var trueCost = parseInt(data["cost"]*(data["increment_count"]+1));
 
         this.incCoins(-trueCost,false);
@@ -3717,6 +3721,7 @@ var SoaringSheepGame = function(){
             if(!this.achievements.single.enhanced_once[0].complete || !this.achievements.single.enhanced_once[0].synced)  {       this.GooglePlayServices.unlockAchievement("enhanced_once");
             }
             //-Incremental:
+            var i = 0;
             for(i=0;i<this.achievements.incremental.enhanced.length;i++){
                 if(!this.achievements.incremental.enhanced[i].complete || !this.achievements.incremental.enhanced[i].synced) {
                     this.GooglePlayServices.incrementAchievement("enhanced",i,1);
@@ -3728,7 +3733,8 @@ var SoaringSheepGame = function(){
 
     this.updateUpgradesPage = function(){
         var nm, data, trueCost;
-
+        
+        var i = null;
         for(i in this.upgrades){
             if(!this.upgrades.hasOwnProperty(i)) continue;
 
@@ -3740,7 +3746,7 @@ var SoaringSheepGame = function(){
             this.upgradesSection[nm].button.text.text = trueCost;
 
             //Footnote Text
-            footnoteText = "Current "+data["type"]+": ";
+            var footnoteText = "Current "+data["type"]+": ";
             switch(data["type"]){
                 case "one-off":
                     footnoteText = (data["increment_count"]==data["max_increments"])?"Activated":"Activate";
@@ -3800,12 +3806,13 @@ var SoaringSheepGame = function(){
     this.checkUpgradeAvailability = function(specific_nm){
         var needCheck = (specific_nm != null && typeof specific_nm != "undefined");
         var ret = true;
-
+        
+        var i = null;
         for(i in this.upgrades){
             if(!this.upgrades.hasOwnProperty(i)) continue;
 
             nm = i.toString();
-            data = this.upgrades[i];
+            var data = this.upgrades[i];
 
             this.upgradesSection[nm].button.overlay.visible = true;
             this.upgradesSection[nm].button.buttonMode = false;
@@ -4457,7 +4464,7 @@ var SoaringSheepGame = function(){
 		if(!this._gameStarted) return;
 
 		if(typeof event == "object" || typeof forcedVal == "object"){
-			e = (typeof event == "object")?event:forcedVal; //sometimes `forcedVal` is the `event`
+			var e = (typeof event == "object")?event:forcedVal; //sometimes `forcedVal` is the `event`
 			if(e.type=="mouseup" || e.type=="touchend"){
 				this.preventHeroJump++;
 			}
@@ -4779,6 +4786,7 @@ var SoaringSheepGame = function(){
                     this.upgrades = JSON.parse(window.localStorage["upgrades"]);
 
                     var nm;
+                    var i = null;
                     for(i in this.upgrades){
                         if(!this.upgrades.hasOwnProperty(i)) continue;
 
@@ -4813,6 +4821,7 @@ var SoaringSheepGame = function(){
                     alert("In this latest update, all completed achievements earns you coins to use in the shop!");
 
                     //Achievement obj exists, therefore need to give the coins accordingly
+                    var i = null;
                     for(i in this.achievements.single){
                         if(!this.achievements.single.hasOwnProperty(i)) continue;
 
